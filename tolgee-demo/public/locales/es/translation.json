@@ -1,0 +1,23 @@
+{
+  "hero_title": "Explora el Mundo",
+  "hero_subtitle": "Descubre destinos impresionantes y crea recuerdos que durarán toda la vida.",
+  "search_placeholder": "¿A dónde quieres ir?",
+  "search_button": "Buscar Vuelos",
+  "destinations_heading": "Destinos Populares",
+  "book_now": "Reservar Ahora",
+  "from_price": "Desde {{price}}",
+  "nights": "{{count}} noches",
+  "rating": "{{rating}} / 5 estrellas",
+  "card_paris_name": "París, Francia",
+  "card_paris_desc": "La ciudad de la luz te espera con arte, moda y exquisita gastronomía.",
+  "card_tokyo_name": "Tokio, Japón",
+  "card_tokyo_desc": "Experimenta la mezcla perfecta de tradición ancestral e innovación moderna.",
+  "card_nyc_name": "Nueva York, EE.UU.",
+  "card_nyc_desc": "La ciudad que nunca duerme — horizontes icónicos, Broadway y Central Park.",
+  "footer_copy": "© 2024 Global Travel Co. Todos los derechos reservados.",
+  "footer_tagline": "Haciendo el mundo más pequeño, una aventura a la vez.",
+  "tab_tolgee": "Modo Tolgee",
+  "tab_i18next": "Modo i18next",
+  "badge_tolgee": "Edición en contexto habilitada — ¡mantén Alt y haz clic en cualquier texto!",
+  "badge_i18next": "Archivos JSON estáticos — edita las traducciones manualmente y vuelve a desplegar."
+}
