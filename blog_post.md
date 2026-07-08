@@ -6,7 +6,7 @@ Here is the scenario: you have a React application. A stakeholder says "we need 
 
 Six weeks later, a Czech-speaking user files a bug report. The goal count in your scorers table reads **"2 gólů"**. The correct Czech is **"2 góly"**. The difference is not cosmetic — it is grammatically wrong in the same way that "2 matches's" is wrong in English. And the worst part: **no error was thrown. No test failed. No warning appeared in the console. It just shipped.**
 
-That is the kind of problem this post is about.
+That is the kind of problem this blog is about.
 
 I built a **FIFA World Cup 2026™ tournament dashboard** — live scoreboard, top scorers, group standings, match fixtures, match feed, tournament facts — localized into English, French, and Czech, using two different i18n stacks. The same UI. The same data. Two translation engines. And I ran the whole thing through 20 automated tests to prove which one got Czech right.
 
