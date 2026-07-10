@@ -423,7 +423,7 @@ Below are real, live captures from our connected Tolgee Cloud project across bot
    *Holding `Alt` and clicking a player's goal count opens the `scorers_goals` key. Notice how all 6 Arabic ICU plural forms (`Zero`, `One`, `Two`, `Few`, `Many`, `Other`) and 4 Czech forms are directly editable inside the overlay.*  
    ![Editing ICU Plural Categories in Context](./images/incontext_editing1.png)
 
-5. **Multi-Language Quick Translation Overlay (`incontext_editing2.png`)**  
+5. **Multi-Language Quick Translation Overlay**  
    *Translators can inspect and modify strings across multiple writing systems simultaneously without leaving the active page.*  
    ![Multi-Language Quick Translation Overlay](./images/incontext_editing2.png)
 
