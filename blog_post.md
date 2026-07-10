@@ -1,10 +1,4 @@
----
-title: "I Built the Same i18n App Twice — Here's What Broke the First Time"
-published: true
-description: "A developer-first, code-driven comparison of Tolgee and i18next. We localised a FIFA World Cup 2026 dashboard into 7 languages (English, French, Czech, Polish, Russian, Hindi, Arabic) — and complex plural rules silently broke standard i18next in ways that ship to production undetected."
-tags: react, i18n, localization, tolgee, opensource
-cover_image: "./images/blog_cover.png"
----
+
 
 # I Built the Same i18n App Twice: Here is What Broke the First Time
 
