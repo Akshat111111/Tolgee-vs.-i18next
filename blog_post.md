@@ -407,19 +407,19 @@ Total time: **30 seconds**. Zero developer involvement.
 
 Below are real, live captures from our connected Tolgee Cloud project across both the web Translation Management System (TMS) and the running application dashboard:
 
-1. **Tolgee Cloud Project Overview (`tolgee_web.png`)**  
+1. **Tolgee Cloud Project Overview**  
    *Live cloud dashboard (`app.tolgee.io`) showing our project **FIFA WC 2026 Demo** with 103 keys at **100% Translated** status across all 7 target languages (`en`, `ar`, `cs-CZ`, `fr`, `hi`, `pl`, `ru`).*  
    ![Tolgee Cloud Project Overview](./images/tolgee_web.png)
 
-2. **Tolgee Cloud Translation Management System (`translations.png`)**  
+2. **Tolgee Cloud Translation Management System**  
    *The collaborative TMS string view filtering keys side-by-side across English, Russian (`Cyrillic`), and Polish (`Latin with diacritics`)*  
    ![Tolgee Cloud Translation Management System](./images/translations.png)
 
-3. **Full 7-Language Tournament Dashboard (`incontext_editing_dashboard.png`)**  
+3. **Full 7-Language Tournament Dashboard**  
    *Overview of the live dashboard running in browser (`localhost:5173`) with instant hot-swapping across all 7 languages and writing systems.*  
    ![Full 7-Language Tournament Dashboard](./images/incontext_editing_dashboard.png)
 
-4. **Editing ICU Plural Categories in Context (`incontext_editing1.png`)**  
+4. **Editing ICU Plural Categories in Context**  
    *Holding `Alt` and clicking a player's goal count opens the `scorers_goals` key. Notice how all 6 Arabic ICU plural forms (`Zero`, `One`, `Two`, `Few`, `Many`, `Other`) and 4 Czech forms are directly editable inside the overlay.*  
    ![Editing ICU Plural Categories in Context](./images/incontext_editing1.png)
 
@@ -427,15 +427,15 @@ Below are real, live captures from our connected Tolgee Cloud project across bot
    *Translators can inspect and modify strings across multiple writing systems simultaneously without leaving the active page.*  
    ![Multi-Language Quick Translation Overlay](./images/incontext_editing2.png)
 
-6. **Editing UI Badge Copy Across Scripts (`incontext_editing3.png`)**  
+6. **Editing UI Badge Copy Across Scripts**  
    *In-context editing on the `tolgee_badge` string across English (Latin), Arabic (RTL), Czech (Diacritics), French, and Hindi (Devanagari).*  
    ![Editing UI Badge Copy Across Scripts](./images/incontext_editing3.png)
 
-7. **Editing Explanatory Paragraph Content (`in_context_editing4.png`)**  
+7. **Editing Explanatory Paragraph Content**  
    *Editing the `tolgee_advantage_plurals` explanation block in real time across all configured cloud locales.*  
    ![Editing Explanatory Paragraph Content](./images/in_context_editing4.png)
 
-8. **Interactive Plural Showdown & Language Filtering (`incontext_editing 5.png`)**  
+8. **Interactive Plural Showdown & Language Filtering**  
    *Filtering active target languages in the DevTools popup while interacting with the live Arabic 6-form Plural Showdown grid (`0×`, `1×`, `2×`, `5×`, `15×`, `100×`).*  
    ![Interactive Plural Showdown & Language Filtering](./images/incontext_editing%205.png)
 
