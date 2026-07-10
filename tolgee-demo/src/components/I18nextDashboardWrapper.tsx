@@ -8,7 +8,7 @@ export function I18nextDashboardWrapper() {
 
   const handleLangChange = (code: string) => {
     setLang(code);
-    i18n.changeLanguage(code);
+    i18n.changeLanguage(code === 'cs-CZ' ? 'cs' : code);
   };
 
   // Wrap t() to match the shared interface: (key, params?) => string

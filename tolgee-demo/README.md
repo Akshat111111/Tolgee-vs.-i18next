@@ -1,20 +1,33 @@
-﻿<div align="center">
+<div align="center">
 
 # React i18n Showdown: Tolgee vs. i18next
-### A Developer-First, Code-Driven Comparison — FIFA World Cup 2026™ Dashboard
+### A Developer-First, Code-Driven Comparison — FIFA World Cup 2026™ Dashboard (7 Languages)
 
 ![Tolgee](https://img.shields.io/badge/Tolgee-SDK_v7-6c63ff?style=for-the-badge&logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZD0iTTEyIDJMMiA3bDEwIDUgMTAtNUwxMiAyeiIgZmlsbD0iI2ZmZiIvPjwvc3ZnPg==&logoColor=white)
 ![React](https://img.shields.io/badge/React-19-61dafb?style=for-the-badge&logo=react)
 ![TypeScript](https://img.shields.io/badge/TypeScript-6.0-3178c6?style=for-the-badge&logo=typescript)
 ![Vite](https://img.shields.io/badge/Vite-8-646cff?style=for-the-badge&logo=vite)
-![Tests](https://img.shields.io/badge/Tests-20%20passing-22c55e?style=for-the-badge&logo=vitest)
+![Tests](https://img.shields.io/badge/Tests-27%20passing-22c55e?style=for-the-badge&logo=vitest)
 ![Open Source](https://img.shields.io/badge/Tolgee-Open_Source-22c55e?style=for-the-badge&logo=github)
 
 </div>
 
 ---
 
-> **TL;DR** — We built the same production-grade multilingual dashboard twice: once with i18next (the industry standard), once with Tolgee (the modern open-source challenger). The Czech plural test broke i18next silently and in production. Tolgee got it right with zero extra config. This repo contains the live demo, the automated test proof, and the honest breakdown of every trade-off.
+> **TL;DR** — We built the same production-grade multilingual dashboard twice: once with **i18next** (the industry standard), once with **Tolgee** (the modern open-source challenger with native ICU MessageFormat). We localized it into **7 languages across 4 writing systems** (`en`, `fr`, `cs-CZ`, `pl`, `ru`, `hi`, `ar`). Complex Slavic 4-form plurals (`one`/`few`/`many`/`other`) and Arabic 6-form plurals (`zero`/`one`/`two`/`few`/`many`/`other`) broke standard i18next silently. Tolgee handled all 7 languages natively with zero extra config.
+
+---
+
+## 📸 Live Application Screenshots
+
+### 1. Full 7-Language FIFA World Cup 2026™ Dashboard
+![FIFA World Cup 2026 Dashboard](../images/incontext_editing_dashboard.png)
+
+### 2. Live In-Context Editing Overlay (`Alt + Click`)
+![Tolgee In-Context Editing Dialog](../images/in_context_editing_hd.png)
+
+### 3. Multi-Language Plural Showdown & Language Selection
+![Plural Showdown & Language Selection](../images/incontext_editing%205.png)
 
 ---
 
@@ -41,7 +54,7 @@ Every developer who has shipped a multilingual app knows the pattern: you start 
 
 The problem isn't the library. i18next is excellent. **The problem is the workflow** — the assumption that developers are the mandatory bottleneck for every single translation change, from architectural refactors to one-word typo fixes.
 
-This project stress-tests that assumption with a real-world use case: a **FIFA World Cup 2026™ tournament dashboard** localized into English, French, and Czech — where Czech's four-form plural system is the definitive technical acid test for any i18n library.
+This project stress-tests that assumption with a real-world use case: a **FIFA World Cup 2026™ tournament dashboard** localized into **7 languages across 4 writing systems** (`en`, `fr`, `cs-CZ`, `pl`, `ru`, `hi`, `ar`) — where complex Slavic four-form plurals (`cs-CZ`, `pl`, `ru`) and Arabic six-form plurals (`ar`) plus right-to-left layout serve as definitive technical acid tests for any i18n library.
 
 ---
 
@@ -64,7 +77,7 @@ i18n
   .init({
     lng: 'en',
     fallbackLng: 'en',
-    supportedLngs: ['en', 'fr', 'cs'],
+    supportedLngs: ['en', 'fr', 'cs', 'pl', 'ru', 'hi', 'ar'],
     backend: { loadPath: '/locales/{{lng}}/translation.json' },
     interpolation: { escapeValue: false },
   });
@@ -220,11 +233,15 @@ export const tolgee = Tolgee()
     apiUrl: import.meta.env.VITE_TOLGEE_API_URL,
     apiKey: import.meta.env.VITE_TOLGEE_API_KEY,
     language: 'en',
-    availableLanguages: ['en', 'fr', 'cs'],
+    availableLanguages: ['en', 'fr', 'cs-CZ', 'pl', 'ru', 'hi', 'ar'],
     staticData: {             // offline fallback — works without Tolgee Cloud
-      en: () => import('./locales/en.json'),
-      fr: () => import('./locales/fr.json'),
-      cs: () => import('./locales/cs.json'),
+      en:      () => import('./locales/en.json'),
+      fr:      () => import('./locales/fr.json'),
+      'cs-CZ': () => import('./locales/cs-CZ.json'),
+      pl:      () => import('./locales/pl.json'),
+      ru:      () => import('./locales/ru.json'),
+      hi:      () => import('./locales/hi.json'),
+      ar:      () => import('./locales/ar.json'),
     },
   });
 ```
@@ -348,23 +365,21 @@ The project is architected around a clean **adapter pattern** that allows the sa
 tolgee-demo/
 ├── src/
 │   ├── __tests__/
-│   │   └── plurals.test.ts           ← 20 automated plural assertions
+│   │   └── plurals.test.ts           ← 27 automated plural assertions across 7 locales
 │   ├── components/
-│   │   ├── FifaDashboard.tsx          ← Shared UI (adapter pattern)
+│   │   ├── FifaDashboard.tsx          ← Shared UI (adapter pattern + RTL support)
 │   │   ├── TolgeeDashboardWrapper.tsx ← Tolgee t() adapter
 │   │   └── I18nextDashboardWrapper.tsx← i18next t() adapter
 │   ├── locales/                       ← Tolgee ICU static fallbacks
-│   │   ├── en.json                    ← English ICU strings
-│   │   ├── fr.json                    ← French ICU strings
-│   │   └── cs.json                    ← Czech with all 4 plural forms
+│   │   ├── en.json / fr.json / hi.json
+│   │   ├── cs-CZ.json / pl.json / ru.json ← Slavic 4-form plurals
+│   │   └── ar.json                    ← Arabic 6-form plurals
 │   ├── data.ts                        ← Shared match/tournament data
 │   ├── tolgee.ts                      ← Tolgee SDK config
 │   └── i18n.ts                        ← i18next config
 ├── public/
 │   └── locales/                       ← i18next JSON files (loaded async)
-│       ├── en/translation.json
-│       ├── fr/translation.json
-│       └── cs/translation.json        ← Czech with _one/_other only
+│       ├── en / fr / hi / cs / pl / ru / ar
 └── .env.local                         ← VITE_TOLGEE_API_KEY etc.
 ```
 
@@ -413,10 +428,14 @@ npm run test
 ✓ Czech Plural Forms -- Standard i18next (no ICU plugin) (5 tests)
 ✓ Tournament Facts -- Tolgee ICU plurals (Czech) (4 tests)
 ✓ Cross-language ICU consistency (4 tests)
+✓ Polish Plural Forms -- Tolgee ICU vs Standard i18next (2 tests)
+✓ Russian Plural Forms -- Tolgee ICU vs Standard i18next (2 tests)
+✓ Hindi Plural Rules -- Note on 0 and 1 (1 test)
+✓ Arabic 6 Plural Forms -- Tolgee ICU vs Standard i18next (2 tests)
 
 Test Files  1 passed (1)
-     Tests  20 passed (20)
-  Duration  ~200ms
+     Tests  27 passed (27)
+  Duration  ~300ms
 ```
 
 ---
@@ -492,8 +511,8 @@ Use the **Tolgee** / **i18next** tabs in the sticky top navigation bar. The enti
 
 The orange warning banner in i18next mode explains why this happens. The green success banner in Tolgee mode shows the correct forms.
 
-### Test language switching
-The sidebar language switcher (English / Français / Čeština) live-swaps all strings — including the navigation labels, scoreboard metadata, tournament facts cards, the scrolling ticker, match feed events, and standings table headers.
+### Test language switching & RTL layout
+The sidebar language switcher (`English`, `Français`, `Čeština`, `Polski`, `Русский`, `हिंदी`, `العربية`) live-swaps all strings — including navigation labels, scoreboard metadata, tournament facts cards, the scrolling ticker, match feed events, and standings table headers. Switching to Arabic (`ar`) automatically switches the layout direction to right-to-left (`dir="rtl"`).
 
 ---
 

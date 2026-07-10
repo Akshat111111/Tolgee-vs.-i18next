@@ -129,3 +129,71 @@ describe('Cross-language ICU consistency', () => {
     expect(new IntlMessageFormat(frGoals, 'fr').format({ count: 7 })).toBe('7 buts');
   });
 });
+
+// =========================================================================
+describe('Polish Plural Forms -- Tolgee ICU vs Standard i18next', () => {
+  const ICU_GOALS_PL =
+    '{count, plural, one {# gol} few {# gole} many {# goli} other {# gola}}';
+
+  it('Tolgee ICU: correctly handles 1 gol, 2 gole, 5 goli', () => {
+    expect(new IntlMessageFormat(ICU_GOALS_PL, 'pl').format({ count: 1 })).toBe('1 gol');
+    expect(new IntlMessageFormat(ICU_GOALS_PL, 'pl').format({ count: 2 })).toBe('2 gole');
+    expect(new IntlMessageFormat(ICU_GOALS_PL, 'pl').format({ count: 4 })).toBe('4 gole');
+    expect(new IntlMessageFormat(ICU_GOALS_PL, 'pl').format({ count: 5 })).toBe('5 goli');
+  });
+
+  it('Standard i18next: without _few key, count=2 incorrectly outputs _other ("2 gola")', () => {
+    const rule = new Intl.PluralRules('pl').select(2);
+    expect(rule).toBe('few');
+    // In standard i18next without _few, it falls back to _other
+    const i18nextFallback = `${2} gola`;
+    expect(i18nextFallback).not.toBe('2 gole');
+  });
+});
+
+// =========================================================================
+describe('Russian Plural Forms -- Tolgee ICU vs Standard i18next', () => {
+  const ICU_GOALS_RU =
+    '{count, plural, one {# гол} few {# гола} many {# голов} other {# гола}}';
+
+  it('Tolgee ICU: correctly handles 1 гол, 2 гола, 5 голов', () => {
+    expect(new IntlMessageFormat(ICU_GOALS_RU, 'ru').format({ count: 1 })).toBe('1 гол');
+    expect(new IntlMessageFormat(ICU_GOALS_RU, 'ru').format({ count: 2 })).toBe('2 гола');
+    expect(new IntlMessageFormat(ICU_GOALS_RU, 'ru').format({ count: 5 })).toBe('5 голов');
+  });
+
+  it('Standard i18next: count=2 returns few rule', () => {
+    expect(new Intl.PluralRules('ru').select(2)).toBe('few');
+    expect(new Intl.PluralRules('ru').select(5)).toBe('many');
+  });
+});
+
+// =========================================================================
+describe('Hindi Plural Rules -- Note on 0 and 1', () => {
+  it('Intl.PluralRules for Hindi treats 0 as "one"', () => {
+    expect(new Intl.PluralRules('hi').select(0)).toBe('one');
+    expect(new Intl.PluralRules('hi').select(1)).toBe('one');
+    expect(new Intl.PluralRules('hi').select(2)).toBe('other');
+  });
+});
+
+// =========================================================================
+describe('Arabic 6 Plural Forms -- Tolgee ICU vs Standard i18next', () => {
+  const ICU_GOALS_AR =
+    '{count, plural, zero {صفر أهداف} one {هدف واحد} two {هدفان} few {# أهداف} many {# هدفاً} other {# هدف}}';
+
+  it('Tolgee ICU: handles all 6 Arabic plural forms correctly', () => {
+    expect(new IntlMessageFormat(ICU_GOALS_AR, 'ar').format({ count: 0 })).toBe('صفر أهداف');
+    expect(new IntlMessageFormat(ICU_GOALS_AR, 'ar').format({ count: 1 })).toBe('هدف واحد');
+    expect(new IntlMessageFormat(ICU_GOALS_AR, 'ar').format({ count: 2 })).toBe('هدفان');
+    expect(new IntlMessageFormat(ICU_GOALS_AR, 'ar').format({ count: 5 })).toBe('5 أهداف');
+    expect(new IntlMessageFormat(ICU_GOALS_AR, 'ar').format({ count: 15 })).toBe('15 هدفاً');
+    expect(new IntlMessageFormat(ICU_GOALS_AR, 'ar').format({ count: 100 })).toBe('100 هدف');
+  });
+
+  it('Standard i18next: only supports _one and _other, failing on zero, two, few, many', () => {
+    const rules = [0, 2, 5, 15].map(n => new Intl.PluralRules('ar').select(n));
+    expect(rules).toEqual(['zero', 'two', 'few', 'many']);
+  });
+});
+

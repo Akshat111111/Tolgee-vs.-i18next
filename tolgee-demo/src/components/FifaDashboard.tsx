@@ -11,9 +11,13 @@ interface DashboardProps {
 }
 
 const LANGS = [
-  { code: 'en', label: 'English', flag: '🇬🇧' },
-  { code: 'fr', label: 'Français', flag: '🇫🇷' },
-  { code: 'cs', label: 'Čeština', flag: '🇨🇿' },
+  { code: 'en',    label: 'English',   flag: '🇬🇧' },
+  { code: 'fr',    label: 'Français',  flag: '🇫🇷' },
+  { code: 'cs-CZ', label: 'Čeština',   flag: '🇨🇿' },
+  { code: 'pl',    label: 'Polski',    flag: '🇵🇱' },
+  { code: 'ru',    label: 'Русский',   flag: '🇷🇺' },
+  { code: 'hi',    label: 'हिंदी',      flag: '🇮🇳' },
+  { code: 'ar',    label: 'العربية',   flag: '🇸🇦' },
 ];
 
 const NAV_ITEMS = [
@@ -56,7 +60,7 @@ export function FifaDashboard({ t, mode, lang, onLangChange }: DashboardProps) {
   }, [t]);
 
   return (
-    <div className="dashboard-layout">
+    <div className="dashboard-layout" dir={lang === 'ar' ? 'rtl' : 'ltr'}>
       {/* ── Sidebar ── */}
       <aside className="sidebar" role="navigation" aria-label="Main navigation">
         <div className="sidebar-logo">
@@ -421,25 +425,69 @@ export function FifaDashboard({ t, mode, lang, onLangChange }: DashboardProps) {
               <p>{t('tolgee_advantage_plurals')}</p>
               {/* Czech plurals showcase */}
               <div className="plural-demo">
-                <div className="plural-demo-title">Czech Goal Count Demo (via {isTolgee ? 'Tolgee ICU ✅' : 'i18next ⚠️'})</div>
+                <div className="plural-demo-title">
+                  {lang === 'ar'
+                    ? `Arabic Goal Count Demo (via ${isTolgee ? 'Tolgee ICU ✅' : 'i18next ⚠️'})`
+                    : lang === 'pl'
+                    ? `Polish Goal Count Demo (via ${isTolgee ? 'Tolgee ICU ✅' : 'i18next ⚠️'})`
+                    : lang === 'ru'
+                    ? `Russian Goal Count Demo (via ${isTolgee ? 'Tolgee ICU ✅' : 'i18next ⚠️'})`
+                    : `Czech Goal Count Demo (via ${isTolgee ? 'Tolgee ICU ✅' : 'i18next ⚠️'})`}
+                </div>
                 <div className="plural-demo-grid">
-                  {[1, 2, 3, 5, 21].map(n => (
+                  {(lang === 'ar' ? [0, 1, 2, 5, 15, 100] : [1, 2, 3, 5, 21]).map(n => (
                     <div className="plural-demo-item" key={n}>
                       <span className="plural-num">{n}×</span>
-                      <span className={`plural-word ${lang === 'cs' && isTolgee ? 'plural-correct' : lang === 'cs' ? 'plural-warn' : ''}`}>
+                      <span className={`plural-word ${
+                        (lang === 'cs-CZ' || lang === 'pl' || lang === 'ru' || lang === 'ar') && isTolgee
+                          ? 'plural-correct'
+                          : (lang === 'cs-CZ' || lang === 'pl' || lang === 'ru' || lang === 'ar')
+                          ? 'plural-warn'
+                          : ''
+                      }`}>
                         {t('scorers_goals', { count: n })}
                       </span>
                     </div>
                   ))}
                 </div>
-                {lang === 'cs' && !isTolgee && (
+                {lang === 'cs-CZ' && !isTolgee && (
                   <div className="plural-warning">
-                    ⚠️ i18next shows "gólů" for all counts. Czech needs: 1→gól, 2-4→góly, 5+→gólů. Needs i18next-icu plugin!
+                    ⚠️ i18next shows "gólů" for counts 2–4. Czech needs: 1→gól, 2–4→góly, 5+→gólů. Needs i18next-icu plugin!
                   </div>
                 )}
-                {lang === 'cs' && isTolgee && (
+                {lang === 'cs-CZ' && isTolgee && (
                   <div className="plural-success">
                     ✅ Tolgee ICU correctly shows: 1 gól · 2 góly · 3 góly · 5 gólů · 21 gólů
+                  </div>
+                )}
+                {lang === 'pl' && !isTolgee && (
+                  <div className="plural-warning">
+                    ⚠️ i18next shows "goli" for counts 2–4. Polish needs: 1→gol, 2–4→gole, 5+→goli. Missing _few key!
+                  </div>
+                )}
+                {lang === 'pl' && isTolgee && (
+                  <div className="plural-success">
+                    ✅ Tolgee ICU correctly shows: 1 gol · 2 gole · 3 gole · 5 goli · 21 goli
+                  </div>
+                )}
+                {lang === 'ru' && !isTolgee && (
+                  <div className="plural-warning">
+                    ⚠️ i18next shows "голов" for counts 2–4. Russian needs: 1→гол, 2–4→гола, 5+→голов. Missing _few key!
+                  </div>
+                )}
+                {lang === 'ru' && isTolgee && (
+                  <div className="plural-success">
+                    ✅ Tolgee ICU correctly shows: 1 гол · 2 гола · 3 гола · 5 голов · 21 гол
+                  </div>
+                )}
+                {lang === 'ar' && !isTolgee && (
+                  <div className="plural-warning">
+                    ⚠️ i18next only knows _one/_other — 4 of 6 Arabic forms are wrong! Missing: zero, two (dual هدفان), few (3–10), many (11–99).
+                  </div>
+                )}
+                {lang === 'ar' && isTolgee && (
+                  <div className="plural-success">
+                    ✅ Tolgee ICU: 0→صفر أهداف · 1→هدف واحد · 2→هدفان · 5→أهداف · 15→هدفاً · 100→هدف
                   </div>
                 )}
               </div>

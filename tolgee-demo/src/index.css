@@ -29,7 +29,7 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
 body {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', 'Noto Sans', 'Noto Sans Arabic', 'Noto Sans Devanagari', sans-serif;
   background: var(--bg-base);
   color: var(--text-primary);
   min-height: 100vh;
@@ -543,3 +543,20 @@ kbd { background: var(--bg-glass); border: 1px solid var(--border-glass); border
   .facts-cards { grid-template-columns: repeat(2,1fr); }
   .bottom-grid { padding: 0 16px 16px; }
 }
+
+/* ─── RTL Layout (Arabic) ─────────────────────────────────────── */
+[dir="rtl"] .sidebar {
+  border-right: none;
+  border-left: 1px solid var(--border-glass);
+}
+[dir="rtl"] .topbar-left {
+  text-align: right;
+}
+[dir="rtl"] .fixture-teams {
+  flex-direction: row-reverse;
+}
+[dir="rtl"] .live-actions,
+[dir="rtl"] .fixture-actions {
+  flex-direction: row-reverse;
+}
+
