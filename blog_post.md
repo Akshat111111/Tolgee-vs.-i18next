@@ -521,15 +521,8 @@ Beyond React, the open-source community maintains official Tolgee SDKs for:
 
 If you need something that does not exist yet, you can build it. The SDK architecture is extensible — as shown by the `DevTools()` and `FormatIcu()` plugin pattern in this demo.
 
----
 
-## Part 7: What Is Tolgee
-
-Tolgee is an open-source Translation Management System with a React SDK (`@tolgee/react`). The core idea is that translations live in a connected cloud project (or a self-hosted instance) rather than in static JSON files committed to your repo. The SDK embeds into your running app and enables the Alt+Click in-context editor shown throughout this post.
-
-It is MIT-licensed. The platform code is on GitHub at [`tolgee/tolgee-platform`](https://github.com/tolgee/tolgee-platform). Self-hosting is one Docker command. Official integrations exist for React, Next.js, Vue, Angular, and Svelte.
-
-If you want to go deeper, the [documentation](https://docs.tolgee.io) covers everything from project setup to CI/CD integration.
+If you want to go more deeper, the [documentation](https://docs.tolgee.io) covers everything from project setup to CI/CD integration.
 
 ---
 
