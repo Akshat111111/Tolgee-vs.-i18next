@@ -58,7 +58,7 @@
   "standings_eliminated": "Vyřazen",
 
   "scorers_title": "Nejlepší střelci",
-  "scorers_goals": "{count, plural, one {# gól} few {# góly} other {# gólů}}",
+  "scorers_goals": "{count, plural, one {# gól} few {# góly} many {# gólu} other {# gólů}}",
   "scorers_assists": "{count, plural, one {# asistence} few {# asistence} other {# asistencí}}",
   "scorers_club": "{club}",
   "scorers_nationality": "{country}",

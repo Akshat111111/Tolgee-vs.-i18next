@@ -151,7 +151,7 @@ The live count pill in the header also breaks: the dashboard shows `2 zápasů �
 
 ![i18next Czech Mode — Broken Plurals](./images/i18next_cs_upper.png)
 
-The orange warning banner in the dashboard explicitly calls this out: *"Režim i18next — POZOR: 3 goly = '3 golu' ale správně by mělo být '3 góly'. Chybí i18next-icu plugin!"*
+The orange warning banner in the dashboard explicitly calls this out: *"Režim i18next — POZOR: '3 góly' je správně, ale i18next zobrazuje '3 gólů'. Chybí plugin i18next-icu!"*
 
 ---
 
@@ -379,33 +379,41 @@ Total time for a one-word copy change in a JSON file: **1–4 hours of developer
 
 This is the tax. And in a dashboard like this one — with over 110 translation keys across **seven locales** (`en`, `fr`, `cs-CZ`, `pl`, `ru`, `hi`, `ar`), covering navigation labels, match statistics, tournament facts, scorers, standings headers, feed events, and footer copy — that tax compounds every time a translator or product manager wants to touch anything.
 
-### The Tolgee Workflow
+### The Tolgee Workflow: A Real Edit, End to End
 
-The `DevTools()` plugin transforms every translated string in the running application into a clickable edit target. On the staging URL, a translator holds `Alt`, clicks on any text — the header title, a fixture button, the tournament facts ticker — and an overlay opens:
+To demonstrate this concretely, I performed a real fix through the in-context editor during the writing of this post.
 
-![Tolgee In-Context Editing Dialog](./images/in_context_editing_hd.png)
+Switching to Czech in the sidebar and holding `Alt`, I clicked on the **"7 gólů"** goal count next to Kylian Mbappé in the Top Scorers section. An overlay appeared immediately, showing the `scorers_goals` ICU string editable across all seven languages at once:
 
-Inside the overlay:
+![Tolgee In-Context Editing — Czech plural forms open in the overlay](./images/Tolgee%20edit1.png)
 
-- The **translation key** is visible (`fixture_watch`, `feed_goal`, `scorers_goals`, etc.)
-- All seven language translations (`en`, `fr`, `cs-CZ`, `pl`, `ru`, `hi`, `ar`) are editable in the same form
-- **AI translation suggestions** from OpenAI, DeepL, and Google Translate are one click away
-- A screenshot of the surrounding UI can be attached for future context
-- Clicking **Save** pushes the change directly to Tolgee Cloud (or your self-hosted instance) and reflects it in the running app without a page reload
+I noticed the Czech `Many` category (used for decimal counts like *2.5 gólu*) was empty — a genuine gap. I typed `gólu` into that field:
 
+![Czech Many field filled in with gólu](./images/tolgee%20edit2.png)
+
+After clicking **Save**, the change was pushed directly to Tolgee Cloud with no build, no PR, and no deploy. The Tolgee activity log confirmed the edit instantly:
+
+![Tolgee Cloud activity log showing scorers_goals updated with many {gólu}](./images/updated_translate.png)
+
+The full audit trail shows:
+- **Key:** `scorers_goals` (Czech / cs-CZ)
+- **Change:** `many {gólu}` added (highlighted green in the diff)
+- **Author:** Akshat Sharma
+- **Time:** 7/20/2026 9:34 AM
+- **How:** Alt+Click in the live running app — no code touched
+
+The corrected ICU string is now:
 ```
-1. Translator notices the error on the live staging URL
-2. Holds Alt, clicks the string
-3. Edits 'zápasový den' in the overlay
-4. Clicks Save
-5. Verified instantly in context
+{count, plural, one {# gól} few {# góly} many {# gólu} other {# gólů}}
 ```
 
-Total time: **30 seconds**. Zero developer involvement.
+Total time from noticing the gap to seeing it live in Tolgee Cloud: **under 60 seconds**.
+
+With i18next, the same fix would require editing the JSON locale file, committing, opening a PR, getting a review, merging, and waiting for the CI pipeline to deploy. With Tolgee's in-context editor connected to a live project, a translator (not a developer) can do this themselves.
 
 #### Live In-Context Editing & Cloud Synchronization Gallery
 
-Below are real, live captures from our connected Tolgee Cloud project across both the web Translation Management System (TMS) and the running application dashboard:
+Below are additional captures from the running app showing the full scope of what the in-context editor exposes:
 
 1. **Tolgee Cloud Project Overview**  
    *Live cloud dashboard (`app.tolgee.io`) showing our project **FIFA WC 2026 Demo** with 103 keys at **100% Translated** status across all 7 target languages (`en`, `ar`, `cs-CZ`, `fr`, `hi`, `pl`, `ru`).*  
@@ -436,7 +444,7 @@ Below are real, live captures from our connected Tolgee Cloud project across bot
    ![Editing Explanatory Paragraph Content](./images/in_context_editing4.png)
 
 8. **Interactive Plural Showdown & Language Filtering**  
-   *Filtering active target languages in the DevTools popup while interacting with the live Arabic 6-form Plural Showdown grid (`0×`, `1×`, `2×`, `5×`, `15×`, `100×`).*  
+   *Filtering active target languages in the DevTools popup while interacting with the live Arabic 6-form Plural Showdown grid (`0×`, `1×`, `2×`, `5×`, `15×`, `100×`).*
    ![Interactive Plural Showdown & Language Filtering](./images/incontext_editing%205.png)
 
 ---
@@ -515,52 +523,16 @@ If you need something that does not exist yet, you can build it. The SDK archite
 
 ---
 
-## Part 7: Why Developers Actually Enjoy Working With Tolgee 
+## Part 7: What Is Tolgee
 
-Most localization platforms feel like they were designed by enterprise procurement committees: heavy web portals, clunky CLI sync scripts that overwrite local files, and workflows that treat developers as human copy-paste pipelines.
+Tolgee is an open-source Translation Management System with a React SDK (`@tolgee/react`). The core idea is that translations live in a connected cloud project (or a self-hosted instance) rather than in static JSON files committed to your repo. The SDK embeds into your running app and enables the Alt+Click in-context editor shown throughout this post.
 
-Tolgee is built as an **open-source developer-first alternative to Crowdin, Phrase, or Lokalise**. It is designed around a simple goal: **save valuable engineering hours that would otherwise be wasted on localization chores, while ensuring your software is flawlessly translated.**
+It is MIT-licensed. The platform code is on GitHub at [`tolgee/tolgee-platform`](https://github.com/tolgee/tolgee-platform). Self-hosting is one Docker command. Official integrations exist for React, Next.js, Vue, Angular, and Svelte.
 
-Here is what makes developers and localization teams actually enjoy using it:
-
-### 1. True Embedded Integrations (SDKs Over Dumb Sync)
-Legacy i18n tools just sync static `.json` or `.po` files with a remote database. Tolgee takes a fundamentally different architecture: it provides **true integrations** via reactive SDKs (`@tolgee/react`, Next.js, Vue, Angular, Svelte). Instead of passively reading files, the SDK embeds directly into your app runtime, enabling dynamic hot-swapping, inline formatting, and live interaction.
-
-### 2. In-Context Translating & One-Click Screenshots
-Stop digging through 3,000-line JSON files to figure out where a button label lives. With the Tolgee i18n tool enabled:
-- **Alt / Option + Click any element** in your running application to open an instant editing dialog where you can modify strings effortlessly across all target locales.
-- **One-Click Automated Screenshots**: Hold `Alt + Click` on a string and hit the camera button. Boom! Your screenshot is instantly generated with the exact translated phrase highlighted and automatically attached to the key in the TMS. Future translators instantly see visual context.
-
-### 3. Translating Directly on Production (`Tolgee Tools` Extension)
-In-context translation works seamlessly even on the **production environment** of your deployed app. With the official **Tolgee Tools Chrome extension**, translators, product managers, or QA reviewers simply enter their API key and start translating directly on the live production UI—no coding skills, local dev environments, or Git branches required.
-
-### 4. AI Machine Translation & Smart Translation Memory
-- **Multi-Engine Machine Translation**: Choose between **DeepL, Google Translate, and AWS Translate** in your project settings. Translators can trigger instant AI-powered suggestions to accelerate localization with high grammatical accuracy.
-- **Contextual Translation Memory (TM)**: Tolgee automatically suggests translations based on phrases previously used in your project. TM suggestions display the exact **similarity percentage**, matching key, and original text so teams maintain absolute terminology consistency.
-- **Instant Auto Translation**: When enabled, Tolgee automatically translates newly created keys immediately upon creation using your preferred Translation Memory or Machine Translation engine.
-
-### 5. Full Auditability: Activity Log, Comments & Translation History
-- **Activity Log**: Complete, granular visibility into who created, modified, reviewed, or commented on any phrase across your project.
-- **Inline Comments**: Notice awkward phrasing or ambiguous context? Leave collaborative comments directly on specific translation keys inside the platform.
-- **Translation History**: Inspect the full diff history of any translation key in any language over time. If a regression happens, you know exactly when and why it changed.
-
-### 6. Built for AI Coding Assistants: Native MCP Server
-Tolgee exposes a native **MCP (Model Context Protocol) Server** that bridges your localization platform directly into modern AI code editors (like Cursor, Claude, or Windsurf). Your AI assistant can natively:
-- Search existing translation keys and inspect locale coverage
-- Create new keys and populate translations automatically during feature generation
-- Trigger machine translation pipelines and manage project languages directly from your IDE prompt
-
-### 7. Developer Tooling & Getting Started 🚀
-Whether you prefer managed cloud or self-hosting, getting started takes under two minutes:
-1. **Sign up** at [`app.tolgee.io`](https://app.tolgee.io) (or launch your self-hosted Docker instance).
-2. **Create a project** and grab your API key.
-3. **Follow an integration guide** in the official docs ([`docs.tolgee.io`](https://docs.tolgee.io)) for your framework.
-4. Use the **Tolgee CLI** to automate CI/CD extraction and synchronization—and have fun!
+If you want to go deeper, the [documentation](https://docs.tolgee.io) covers everything from project setup to CI/CD integration.
 
 ---
 
-
----
 
 ## The Full Comparison Table
 
@@ -654,7 +626,19 @@ Tolgee was built by people who understand that the plural problem is not the onl
 
 The ICU format is technically correct. The in-context editor is the right workflow. Open source and self-hostable is the right infrastructure model. This demo exists to show all three of those things running at the same time, in a real application, with code you can clone and tests you can run.
 
+
 ---
+
+## A Note on Using Both Together
+
+This post frames Tolgee and i18next as alternatives, because that is the most useful way to show the difference in how they handle plurals. But in practice, they are not mutually exclusive.
+
+Tolgee has an [official i18next integration](https://docs.tolgee.io/js-sdk/integrations/i18next/react-integration). Many teams use i18next as the runtime — keeping the familiar `t()` API, namespaces, and their existing JSON locale files — while adding Tolgee on top as the Translation Management System. You get the Alt+Click in-context editor, the cloud project, the activity log, and the translator workflow, without rewriting any of your existing `useTranslation()` calls.
+
+If you already have an i18next codebase and the plural handling is not a problem for your language set, that integration path is worth looking at. The two tools genuinely complement each other.
+
+---
+
 
 **Links**
 

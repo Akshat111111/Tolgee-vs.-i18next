@@ -74,7 +74,7 @@
   "feed_penalty": "🎯 Penalta pro {{team}}",
   "feed_minute": "{{minute}}'",
   "tolgee_badge": "✨ Přímá editace zapnuta — podržte Alt a klikněte na libovolný text!",
-  "i18next_badge": "📁 Režim i18next — POZOR: '3 gólů' je správně, ale i18next zobrazuje '3 gólů' i pro 2–4 (mělo by být '2 góly'). Chybí plugin i18next-icu!",
+  "i18next_badge": "📁 Režim i18next — POZOR: '3 góly' je správně, ale i18next zobrazuje '3 gólů'. Chybí plugin i18next-icu!",
   "tolgee_advantage_title": "Proč Tolgee vyhrává",
   "tolgee_advantage_plurals": "🇨🇿 Čeština má 4 tvary množného čísla (gól/góly/gólů). Tolgee ICU formát je zvládá všechny. i18next potřebuje extra plugin.",
   "tolgee_advantage_context": "🖱️ Alt+klik na libovolný text pro editaci přímo v aplikaci — bez kódu, bez PR, bez nasazení.",
