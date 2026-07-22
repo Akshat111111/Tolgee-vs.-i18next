@@ -4,7 +4,7 @@
 
 ## Why Localization Matters to Me as a Football Fan and Developer
 
-Every four years, the FIFA World Cup brings the entire planet together. Billions of fans tune in from almost every country on earth. Like many of you, I am a huge football fan. I also happen to read and speak several languages, and one thing I have noticed over the years is how much more personal and exciting following the tournament feels when you can read match stats, live commentaries, and news in your own local mother tongue.
+Every four years, the FIFA World Cup brings the entire planet together. Billions of fans tune in from almost every country on earth. Like many of you, I am a huge football fan. I also happen to read and speak several languages, and one thing I have noticed over the years is how much more personal and exciting following the tournament feels when you can read match stats, live commentaries, and news in your own mother tongue.
 
 But while browsing international sports articles and tournament dashboards across different languages, I kept running into the same frustrating problem: grammatical errors everywhere. Plural goal counts that sounded robotic or broken. Buttons that overflowed their boxes, or pages that crashed completely when someone tried to use auto translate in their browser.
 
@@ -19,7 +19,7 @@ Here is what the dashboard looks like:
 ![FIFA World Cup 2026 Dashboard: English Mode](./images/tolgee_en_initial_upper.png)
 
 The two stacks:
-1. **i18next**: the industry standard, file based, suffix key plurals, HTTP backend
+1. **i18next**: the industry standard, file-based, suffix key plurals, HTTP backend
 2. **Tolgee**: an open source SDK and Translation Management System with native ICU MessageFormat support
 
 Let's get into it.
@@ -110,7 +110,7 @@ That works. The problem only surfaces when you switch the language to Czech.
 
 ### The Problem: Slavic 4-Form Plurals and Arabic 6-Form Plurals
 
-English plurals are binary: `1 match` / `5 matches`. Slavic languages like **Czech, Polish, and Russian** follow the **Unicode CLDR plural specification** with four grammatically distinct forms (`one`, `few`, `many`, `other`). Even more extreme is **Arabic**, which has **six distinct plural categories** — the maximum possible in CLDR:
+English plurals are binary: `1 match` / `5 matches`. Slavic languages like **Czech, Polish, and Russian** follow the **Unicode CLDR plural specification** with four grammatically distinct forms (`one`, `few`, `many`, `other`). Arabic is even more extreme, with **six distinct plural categories** — the maximum possible in CLDR:
 
 | CLDR Category | Count | Czech (`gól`) | Polish (`gol`) | Russian (`гол`) | Arabic (`هدف`) |
 |---|---|---|---|---|---|
@@ -165,7 +165,7 @@ The mechanism that makes this particularly dangerous in production:
 4. A developer who does not speak Czech has no way to spot it during code review
 5. Most translation reviewers work from static screenshots, not live apps with dynamic counts
 
-This is not a hypothetical. It is the kind of bug that makes it into production in apps localized for Polish, Russian, Arabic, or any other language with more than two plural forms — and stays there because nobody who can see it has the access to fix it.
+This is not a hypothetical. It is the kind of bug that makes it into production in apps localized for Polish, Russian, Arabic, or any other language with more than two plural forms — and stays there because nobody who notices it has the ability to fix it.
 
 ---
 
@@ -239,13 +239,21 @@ Two things worth calling out:
 **`staticData`** — these are dynamic imports that Vite bundles as separate async chunks. Check the build output:
 
 ```
-dist/assets/en-1mDUlYNd.js       7.03 kB │ gzip: 2.87 kB
-dist/assets/fr-DwcYreVG.js       7.26 kB │ gzip: 2.97 kB
-dist/assets/cs-CZ-B-_zYhD5.js    7.48 kB │ gzip: 3.16 kB
-dist/assets/pl-K1aL9mN2.js       7.51 kB │ gzip: 3.18 kB
-dist/assets/ru-P4vR8jK3.js       8.12 kB │ gzip: 3.42 kB
-dist/assets/hi-X7bM2qQ1.js       8.84 kB │ gzip: 3.65 kB
-dist/assets/ar-Z9cW4pL6.js       8.45 kB │ gzip: 3.51 kB
+vite v8.1.3 building client environment for production...
+✓ 61 modules transformed.
+
+dist/index.html                   0.46 kB │ gzip:   0.29 kB
+dist/assets/index-4C8f5oeS.css   21.35 kB │ gzip:   4.74 kB
+dist/assets/en-1mDUlYNd.js        7.03 kB │ gzip:   2.87 kB
+dist/assets/fr-DwcYreVG.js        7.26 kB │ gzip:   2.97 kB
+dist/assets/cs-CZ-DGy2fZiq.js     7.49 kB │ gzip:   3.17 kB
+dist/assets/pl-B5rMwVrt.js        7.55 kB │ gzip:   3.18 kB
+dist/assets/ru-CTfCuXxl.js        9.08 kB │ gzip:   3.55 kB
+dist/assets/ar-DJu1entp.js        9.36 kB │ gzip:   3.44 kB
+dist/assets/hi-44eIwXL0.js        9.48 kB │ gzip:   3.28 kB
+dist/assets/index-DoMQ5NLb.js   338.36 kB │ gzip: 104.82 kB
+
+✓ built in 306ms
 ```
 
 Each locale is lazy-loaded on demand. If Tolgee Cloud is offline or the API key is missing, the app falls back to these embedded files silently — no broken UI, no missing strings.
@@ -377,7 +385,7 @@ When a Czech translator reviews the deployed staging dashboard and spots that `�
 
 Total time for a one-word copy change in a JSON file: **1–4 hours of developer time that has nothing to do with development**.
 
-This is the tax. And in a dashboard like this one — with over 110 translation keys across **seven locales** (`en`, `fr`, `cs-CZ`, `pl`, `ru`, `hi`, `ar`), covering navigation labels, match statistics, tournament facts, scorers, standings headers, feed events, and footer copy — that tax compounds every time a translator or product manager wants to touch anything.
+This is the tax. And in a dashboard like this one — with over 100 translation keys across **seven locales** (`en`, `fr`, `cs-CZ`, `pl`, `ru`, `hi`, `ar`), covering navigation labels, match statistics, tournament facts, scorers, standings headers, feed events, and footer copy — that tax compounds every time a translator or product manager wants to touch anything.
 
 ### The Tolgee Workflow: A Real Edit, End to End
 
@@ -420,7 +428,7 @@ Below are additional captures from the running app showing the full scope of wha
    ![Tolgee Cloud Project Overview](./images/tolgee_web.png)
 
 2. **Tolgee Cloud Translation Management System**  
-   *The collaborative TMS string view filtering keys side-by-side across English, Russian (`Cyrillic`), and Polish (`Latin with diacritics`)*  
+   *The collaborative TMS string view filtering keys side-by-side across English, Russian (`Cyrillic`), and Polish (`Latin with diacritics`).*  
    ![Tolgee Cloud Translation Management System](./images/translations.png)
 
 3. **Full 7-Language Tournament Dashboard**  
@@ -522,7 +530,7 @@ Beyond React, the open-source community maintains official Tolgee SDKs for:
 If you need something that does not exist yet, you can build it. The SDK architecture is extensible — as shown by the `DevTools()` and `FormatIcu()` plugin pattern in this demo.
 
 
-If you want to go more deeper, the [documentation](https://docs.tolgee.io) covers everything from project setup to CI/CD integration.
+If you want to go deeper, the [documentation](https://docs.tolgee.io) covers everything from project setup to CI/CD integration.
 
 ---
 
@@ -531,7 +539,7 @@ If you want to go more deeper, the [documentation](https://docs.tolgee.io) cover
 
 ### 1. 7-Language Plural & Writing System Comparison Matrix
 
-Our project tests all 7 locales side-by-side across 4 distinct script families (Latin, Cyrillic, Devanagari, Arabic RTL). Both translation files (`public/locales` and `src/locales`) use authentic grammar and diacritics so the comparison tests engine architecture—specifically native ICU MessageFormat vs. standard suffix keys:
+Our project tests all 7 locales side-by-side across 4 distinct script families (Latin, Cyrillic, Devanagari, Arabic RTL). Both translation files (`public/locales` and `src/locales`) use authentic grammar and diacritics so the comparison tests each engine's handling of native ICU MessageFormat vs. standard suffix keys:
 
 | Language | Code | Writing System | CLDR Plural Forms | Standard i18next Output | Tolgee ICU Output | Test Status |
 |---|---|---|---|---|---|---|
@@ -556,7 +564,7 @@ Our project tests all 7 locales side-by-side across 4 distinct script families (
 | **Translation Storage** | Static JSON files in `public/locales/` | Connected Tolgee Cloud / Self-Hosted TMS + `staticData` bundle |
 | **Copy Edit Workflow** | Edit JSON → Commit → PR → CI/CD build → Production deploy | **`Alt + Click`** → Edit in overlay → Save → Instantly live |
 | **Translator & QA Tooling** | None built-in (static code files) | Live in-context visual editor, AI translation suggestions, screenshot context |
-| **Browser Auto-Translate Crash Risk** | High if locales are missing (DOM node mutation crashes React Virtual DOM) | **Eliminated** by shipping fast native localizations across all 7 languages |
+| **Browser Auto-Translate Crash Risk** | High if locales are missing (DOM node mutation crashes React Virtual DOM) | **Eliminated** by shipping proper native localizations across all 7 languages |
 | **Self-Hosting Options** | N/A (client library only) | One Docker command (`docker run tolgee/tolgee`) or Azure Marketplace |
 | **Offline Reliability** | Local JSON files | Automatic fallback to bundled `staticData` if offline/API unconfigured |
 | **License** | MIT | **MIT** (Open Source SDK + Open Source Platform) |

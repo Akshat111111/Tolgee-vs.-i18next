@@ -83,7 +83,7 @@
   "tolgee_advantage_context": "🖱️ Alt+klik na libovolný text pro editaci přímo v aplikaci — bez kódu, bez PR, bez nasazení.",
   "tolgee_advantage_live": "⚡ Změny řetězců v Tolgee Cloud se zobrazí okamžitě. i18next vyžaduje build a deploy.",
 
-  "footer_tournament": "FIFA Mistrovství světa klubů 2026™",
+  "footer_tournament": "FIFA Mistrovství světa 2026™",
   "footer_official": "Oficiální palubní deska turnaje",
   "footer_updated": "Poslední aktualizace: {time}",
   "footer_language": "Jazyk",
@@ -107,7 +107,7 @@
   "facts_matches_sub": "{count, plural, one {# zápas} few {# zápasy} other {# zápasů}} — více než na jakémkoli předchozím MS",
 
   "facts_cities_value": "16",
-  "facts_cities_label": "Přijatá města",
+  "facts_cities_label": "Pořadatelská města",
   "facts_cities_sub": "V USA, Kanadě a Mexiku",
 
   "facts_hosts_label": "Tři pořadatelské národy",
